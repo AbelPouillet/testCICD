@@ -15,6 +15,7 @@ jobs:
 
       - name: Install jq
         run: sudo apt-get install jq -y
-
+      - name: Make send_webhook.sh executable
+        run: chmod +x ./send_webhook.sh
       - name: Send Webhook
         run: ./send_webhook.sh
