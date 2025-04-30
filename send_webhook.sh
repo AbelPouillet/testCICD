@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd "$(git rev-parse --show-toplevel)"
 # Variables
 NGROK_URL="https://5a08-2a01-e0a-ba9-4c40-358b-dff0-42e2-58c8.ngrok-free.app"
 WEBHOOK_URL="$NGROK_URL/webhook-test/6a454f38-091e-44be-ba6f-eeb5b8dc9deb"  # Remplacez par votre URL n8n
