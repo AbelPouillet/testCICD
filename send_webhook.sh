@@ -8,7 +8,7 @@ WEBHOOK_URL="$NGROK_URL/webhook-test/6a454f38-091e-44be-ba6f-eeb5b8dc9deb"  # Re
 LAST_COMMIT=$(git log -1 --pretty=format:"%H")
 COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
 AUTHOR=$(git log -1 --pretty=format:"%an" 2>/dev/null || echo "No author")
-DIFF=$(git diff-tree --cc.)
+DIFF=$(git diff-tree -p)
 # Construire le JSON
 JSON=$(jq -n \
   --arg commit "$LAST_COMMIT" \
