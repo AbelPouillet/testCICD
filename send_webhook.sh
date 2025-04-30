@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Variables
-NGROK_URL="https://5a08-2a01-e0a-ba9-4c40-358b-dff0-42e2-58c8.ngrok-free.app/"
+NGROK_URL="https://5a08-2a01-e0a-ba9-4c40-358b-dff0-42e2-58c8.ngrok-free.app"
 WEBHOOK_URL="$NGROK_URL/webhook-test/6a454f38-091e-44be-ba6f-eeb5b8dc9deb"  # Remplacez par votre URL n8n
-LAST_COMMIT=$(git log -1 --pretty=format:"%H")
-COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-AUTHOR=$(git log -1 --pretty=format:"%an")
-DIFF=$(git diff HEAD~1 HEAD)
+
+LAST_COMMIT=$(git log -1 --pretty=format:"%H" 2>/dev/null || echo "No commit found")
+COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s" 2>/dev/null || echo "No commit message")
+AUTHOR=$(git log -1 --pretty=format:"%an" 2>/dev/null || echo "No author")
+DIFF=$(git diff HEAD 2>/dev/null || echo "No changes")
 
 # Construire le JSON
 JSON=$(jq -n \
