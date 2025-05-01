@@ -9,7 +9,7 @@ LAST_COMMIT=$(git log -1 --pretty=format:"%H")
 FILES_CHANGED=$(git show --name-status --oneline "$LAST_COMMIT")
 COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
 AUTHOR=$(git log -1 --pretty=format:"%an" 2>/dev/null || echo "No author")
-DIFF=$(git show "$LAST_COMMIT")
+DIFF=$(git show --stat --patch --unified=3 "$LAST_COMMIT")
 REPO_NAME=$(basename -s .git `git config --get remote.origin.url`)
 OWNER_NAME=$(git config --get remote.origin.url | sed -E 's#.*[:/]([^/]+)/[^/]+\.git#\1#')
 # Construire le JSON
