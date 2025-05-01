@@ -3,75 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de Login</title>
+    <title>Page d'accueil du projet CI/CD avec un webhook n8n</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-        }
-        .login-container {
-            background-color: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #357ae8;
+            color: white;
+            padding: 10px 0;
             text-align: center;
         }
-        .login-container h2 {
-            margin-bottom: 20px;
+        main {
+            margin-top: 20px;
         }
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
+        h1 {
+            color: #357ae8;
         }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .input-group input {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .login-container button:hover {
-            background-color: #0056b3;
+        p {
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
-
-<div class="login-container">
-    <h2>Se Connecter</h2>
-    <form action="#" method="post">
-        <div class="input-group">
-            <label for="username">Nom d'utilisateur:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div class="input-group">
-            <label for="password">Mot de passe:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Connexion</button>
-    </form>
-</div>
-
-<div>
-    Test CICD
-</div>
+    <header>
+        <h1>Bienvenue sur le projet CI/CD avec n8n</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Présentation du projet</h2>
+            <p>Ce projet vise à automatiser les processus de déploiement continu (CI/CD) en utilisant n8n, un outil d'automatisation sans code. Nous utilisons des webhooks pour déclencher des workflows spécifiques en fonction des événements dans notre pipeline CI/CD.</p>
+        </section>
+        <section>
+            <h2>Comment ça marche ?</h2>
+            <p>Lorsqu'un commit est effectué sur la branche principale de notre dépôt, un webhook notifie n8n. Ce dernier lance alors une série d'actions, comme l'exécution de tests automatisés, la construction des artefacts et le déploiement de l'application dans notre environnement de production.</p>
+        </section>
+        <section>
+            <h2>Avantages</h2>
+            <ul>
+                <li><strong>Automatisation</strong> : Réduire les erreurs humaines et gagner du temps.</li>
+                <li><strong>Fiabilité</strong> : S'assurer que chaque déploiement est testé et vérifié.</li>
+                <li><strong>Efficacité</strong> : Déploier plus rapidement et plus souvent sans effort supplémentaire.</li>
+            </ul>
+        </section>
+    </main>
 </body>
 </html>
