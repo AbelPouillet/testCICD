@@ -11,4 +11,7 @@ récupérer l'URL du portail ngrok et la mettre dans le fichier send_webhook.sh
 
 nouvelle page d'acceuil
 
+workflow n8n : CICD_mailOnCommit.json
+
+
 
