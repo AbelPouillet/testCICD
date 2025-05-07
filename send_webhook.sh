@@ -2,7 +2,7 @@
 
 cd "$(git rev-parse --show-toplevel)"
 # Variables
-NGROK_URL="https:\1f9b-2a01-e0a-ba9-4c40-a0d9-7fb4-7892-b01c.ngrok-free.app"
+NGROK_URL="https://1f9b-2a01-e0a-ba9-4c40-a0d9-7fb4-7892-b01c.ngrok-free.app/"
 WEBHOOK_URL="$NGROK_URL/webhook-test/6a454f38-091e-44be-ba6f-eeb5b8dc9deb"  # Remplacez par votre URL n8n
 
 LAST_COMMIT=$(git log -1 --pretty=format:"%H")
