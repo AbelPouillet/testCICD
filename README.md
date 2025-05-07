@@ -13,5 +13,6 @@ nouvelle page d'acceuil
 
 workflow n8n : CICD_mailOnCommit.json
 
+Maintenant le tool github doit etre appeler à chaque commit
 
 
