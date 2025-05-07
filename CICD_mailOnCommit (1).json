@@ -1,0 +1,228 @@
+{
+  "name": "CICD/mailOnCommit",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "6a454f38-091e-44be-ba6f-eeb5b8dc9deb",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        -120
+      ],
+      "id": "d00fd797-b52f-4784-9108-48cdd9dc5875",
+      "name": "Webhook",
+      "webhookId": "6a454f38-091e-44be-ba6f-eeb5b8dc9deb"
+    },
+    {
+      "parameters": {
+        "fromEmail": "abelix.pouillet@gmail.com",
+        "toEmail": "abelix.pouillet@gmail.com",
+        "subject": "=Commit {{ $('Webhook').item.json.body.author }} sur {{ $('Webhook').item.json.body.repo }}",
+        "html": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        -120
+      ],
+      "id": "8a6c4448-f373-4cd8-815b-8bcefb6500af",
+      "name": "Send Email",
+      "webhookId": "9ceae8f2-5bae-4fe3-939d-7c59a4ccfb6a",
+      "credentials": {
+        "smtp": {
+          "id": "FBM6adQ397Tdiwdl",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Voici les informations d’un commit à analyser. Génére un rapport d’analyse en HTML selon le format spécifié dans le message système. Tu détaillera la place du commit dans le projet en analysant les fichiers concernés par les modifications via ton tool github\n\nCommit :\n- RepoUrl : {{ $json.body.owner }}\n- Hash : {{ $json.body.commit }}\n- Auteur : {{ $json.body.author }}\n- Message : {{ $json.body.message }}\n\nFichiers modifiés :\n{{ $json.body.files }}\n\nDiff :\n{{ $json.body.diff }}\n\nFormate ta réponse uniquement comme une présentation html\n\"<html><h2>Analyse du Commit : {{ $json.body.commit }}</h2>...</html>\"\n\nN’utilise aucun commentaire ou texte en dehors de ce bloc html",
+        "options": {
+          "systemMessage": "=Tu es un assistant IA spécialisé dans l’analyse de commits Git, la gestion du tools github, et la rédaction automatique de rapports professionnels en HTML.\n\n\nTu reçois, pour chaque commit, les informations suivantes :\n\ncommit: \nRepoUrl (important pour utiliser le tool github)\nhash du commit,\n\nmessage: message du commit,\n\nauthor: auteur du commit,\n\nfiles: liste des fichiers modifiés (avec leur statut : A=ajout, M=modif, D=suppression),\n\ndiff: contenu textuel des modifications (diff Git),\n\nTu dois également accéder au contenu complet des fichiers du dépôt via un outil GitHub, pour mieux comprendre le contexte et préciser la place du commit dans le projet dans ta réponse.\nPour cela tu va devoir configurer le tool Github tool qui t'est associé.\nEn l'appelant une fois par fichier modifiés dans le commit avec les coordonnées du repos : {{ $json.body.repo }} de {{ $json.body.owner }}\n\n\nTon objectif est de rédiger un email au format HTML destiné à une équipe technique. Cet email doit :\n\ncontenir un résumé professionnel des changements apportés,\n\nanalyser brièvement les impacts techniques ou fonctionnels,\n\nsignaler toute anomalie potentielle (code incomplet, mauvaise pratique, manque de tests, nommage ambigu, etc.),\n\nproposer des recommandations si besoin,\n\nêtre structuré clairement avec des sections, une hiérarchie visuelle, et un ton professionnel.\n\nL’email doit être écrit en HTML pur, sans CSS externe, pour être compatible avec les clients mails standards.\n\nVoici la structure attendue :\n\n\n<h2>Analyse du Commit : [hash court]</h2>\n<p><strong>Auteur :</strong> [Nom de l’auteur]</p>\n<p><strong>Message :</strong> [Message du commit]</p>\n\n<h3>Résumé des Changements</h3>\n<ul>\n  <li>[Ex : Ajout de la gestion des erreurs dans le module de paiement]</li>\n  ...\n</ul>\n\n<h3>Détails Techniques</h3>\n<ul>\n  <li>Fichiers modifiés : [Liste + type de changement]</li>\n  <li>Fonctions ou classes impactées (si identifiable)</li>\n  <li>Tests associés (présents / absents / à recommander)</li>\n</ul>\n\n<h3>Recommandations</h3>\n<ul>\n  <li>[Ex : Ajouter des tests unitaires pour la fonction `processPayment()`]</li>\n  ...\n</ul>\n\n<h3>Niveau de Sévérité</h3>\n<p><strong>[Faible / Moyenne / Élevée]</strong> – selon l’impact potentiel du commit</p>\nRédige le contenu de manière concise, utile et lisible. Ne génère que le corps HTML de l’email, sans balises <html>, <head>, ou <body>.\n\nUne analyse correcte du commit nécessite de connaître le contenu complet d’un fichier, tu DOIS utiliser l’outil GitHub pour le récupérer. Tu as accès à ce tool via les variables suivantes :\n- Repository_Owner\n- Repository_Name\n- File_Path\n- Reference (commit hash)\n\nAvant de rédiger la section “Détails Techniques”, vérifie si tu dois consulter le code d’un ou plusieurs fichiers modifiés.\n "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        220,
+        -120
+      ],
+      "id": "974b38e3-9294-4248-89cf-ee732d2129f2",
+      "name": "AI Agent",
+      "alwaysOutputData": true,
+      "notesInFlow": true,
+      "onError": "continueRegularOutput",
+      "notes": "Agent qui reprend les info du post et du repo"
+    },
+    {
+      "parameters": {
+        "model": "qwen3:32b",
+        "options": {
+          "numCtx": 4096
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        120,
+        220
+      ],
+      "id": "08e9cfbd-70e0-41f0-9425-81600f7d0adc",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "RT5eWMAdPQ1quh6W",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupérer la sortie du parser\nlet rawHtml = $input.first().json.output\n\nrawHtml = rawHtml.replace(/<think>[\\s\\S]*?<\\/think>/gi, '');\n// Remplacer les \\n (retours à la ligne bruts) par un espace ou rien\nrawHtml = rawHtml.replace(/\\\\n/g, ' ');\n\n// Optionnel : compacter les espaces multiples\nrawHtml = rawHtml.replace(/\\s{2,}/g, ' ');\n\nrawHtml = rawHtml.replace(/\\\\n/g, ' ');\n\nrawHtml = rawHtml.replace(/\\s{2,}/g, ' ');\n\nrawHtml = rawHtml.replace(/\\\\n/g, ' ');\n// Retourner la version nettoyée\nreturn [{ json: { html: rawHtml.trim() } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        580,
+        -120
+      ],
+      "id": "ff42dc60-f464-42cc-9be8-2826f2ebb00c",
+      "name": "Code",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.owner }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        220
+      ],
+      "id": "327a6b07-e5fe-4bc2-a7b8-100542ce267a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "resource": "repository",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "mode": "url",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Owner', ``, 'string') }}",
+          "__regex": "https:\\/\\/github.com\\/([-_0-9a-zA-Z]+)"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Repository_Name', `Cette outils permet de récupérer les fichiers du repo que tu lui passe en paramètres.`, 'string') }}",
+          "mode": "url"
+        }
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        120
+      ],
+      "id": "59061633-8a54-4cc7-a58e-48ed5983f3f5",
+      "name": "GitHub",
+      "webhookId": "b7628c80-b4db-4be3-93ff-38b6840fe9f6",
+      "credentials": {
+        "githubApi": {
+          "id": "XjwmT75p82us4KPF",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "08fee5f7-58c2-40ab-83ce-93812c76ffc6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1fef9298adbdb1d370432ac0c9ccd053fbae040f73201c010b72e6aa0ca09017"
+  },
+  "id": "g1PM4k7CPmJtpgD5",
+  "tags": []
+}
